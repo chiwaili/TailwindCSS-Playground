@@ -1,0 +1,22 @@
+/* 
+ * Design System Theme Override
+ * In Tailwind CSS v4, you can customize the theme directly in CSS.
+ * Uncomment and edit variables here to customize your design system.
+ */
+
+@theme {
+  /* Colors */
+  /* --color-slate-900: #0f172a; */
+  /* --color-indigo-600: #5b21b6; */
+  /* --color-rose-300: #fda4af; */
+
+  /* Typography */
+  /* --text-3xl: 1.875rem; */
+
+  /* Spacing */
+  /* --spacing-6: 1.5rem; */
+
+  /* Shadows and Borders */
+  /* --radius-2xl: 1rem; */
+  /* --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1); */
+}

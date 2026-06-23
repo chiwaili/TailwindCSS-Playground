@@ -1,0 +1,10 @@
+/* 
+ * Global styles & .ds-* classes
+ * Dynamic spacing classes to override standard Tailwind spacing if desired.
+ */
+
+@layer utilities {
+  .ds-p-6 {
+    padding: var(--spacing-6);
+  }
+}

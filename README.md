@@ -2,6 +2,8 @@
 
 An interactive playground for learning Tailwind CSS utility classes. Select named options from a controls panel, see the card update live, and inspect the generated class names in real time.
 
+[DEMO LINK](https://chiwaili.github.io/TailwindCSS-Playground/)
+
 ![screenshot placeholder](./src/tailwind-playground.png)
 
 ## Features

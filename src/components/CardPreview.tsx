@@ -1,7 +1,6 @@
 import React from 'react';
+import { Heart } from 'lucide-react';
 import { CardState, HoveredElement } from '../types';
-import { Pin } from 'lucide-react';
-import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 interface CardPreviewProps {
@@ -53,7 +52,7 @@ export function CardPreview({ state, hoveredElement, setHoveredElement }: CardPr
         >
           <div className="absolute inset-0 bg-white/10"></div>
           <button className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm p-2 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
-             <div className="w-3 h-3 bg-white rounded-[1px]"></div>
+             <Heart className="w-3 h-3 text-white" />
           </button>
         </header>
 
@@ -308,7 +307,7 @@ export function CardPreview({ state, hoveredElement, setHoveredElement }: CardPr
                   getHighlightClass('title')
                 )}
               >
-                Alex Chen
+                Peter Parker
               </h2>
               <p 
                 onMouseEnter={() => setHoveredElement('role')}

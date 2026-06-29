@@ -83,7 +83,7 @@ export function CodePanel({ state, lastChanged }: CodePanelProps) {
     <div class="flex flex-col -mt-8 ${state.spacing}">
       <div>
         <h2 class="${state.titleSize} ${state.titleWeight} ${state.titleColor} ${state.titleTracking} ${state.titleLeading}">
-          Peter Pan
+          Peter Parker
         </h2>
         <p class="mt-1 font-medium ${state.roleSize} ${state.roleColor}">
           Senior Digital Product Designer
@@ -101,13 +101,13 @@ export function CodePanel({ state, lastChanged }: CodePanelProps) {
   <header class="relative w-full ${state.headerBg} ${state.headerHeight}">
     <div class="absolute inset-0 bg-white/10"></div>
     <button class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm p-2 rounded-full border border-white/30 hover:bg-white/30 transition-colors">
-      <div class="w-3 h-3 bg-white rounded-[1px]"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
     </button>
   </header>
   <section class="flex flex-col ${state.cardPadding} ${state.spacing}">
     <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Last modified: Dec 3, 2025</p>
     <h2 class="${state.titleSize} ${state.titleWeight} ${state.titleColor} ${state.titleTracking} ${state.titleLeading}">
-      Super dataset report
+      Super tailwindCSS playground from shapes.io
     </h2>
     <dl class="flex flex-col pt-4 border-t border-slate-100 ${state.metaSize} ${state.spacing}">
       <div class="flex justify-between items-center">

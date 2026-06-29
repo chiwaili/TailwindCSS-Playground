@@ -7,7 +7,7 @@ import {
   paddingOptions, marginOptions,
   bgOptions, borderOptions, radiusOptions, shadowOptions
 } from '../data/options';
-import { RotateCcw, Shuffle, ChevronsUpDown } from 'lucide-react';
+import { RotateCcw, Shuffle, BarChart2, ShoppingBag, FileText, User } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ControlsPanelProps {
@@ -74,26 +74,34 @@ export function ControlsPanel({ state, updateState, setHoveredElement, onReset, 
           </div>
           <h1 className="font-bold text-lg tracking-tight">Component Settings</h1>
         </div>
-        <p className="text-xs text-slate-500 uppercase font-semibold tracking-wider italic">Learn by Changing Classes</p>
       </div>
 
-      <div className="px-6 py-4 flex-shrink-0 animate-in fade-in flex items-center gap-2 border-b border-indigo-100 bg-indigo-50/50">
-         <div className="w-full relative">
-            <span className="text-[10px] font-bold text-indigo-700 uppercase mb-1 block tracking-widest">Select Template</span>
-            <select
-              value={state.cardType}
-              onChange={(e) => updateState('cardType', e.target.value, 'Card Type')}
-              className="w-full bg-white border border-indigo-200 text-indigo-900 rounded-lg py-2 pl-3 pr-8 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-400 appearance-none shadow-sm cursor-pointer"
-            >
-              <option value="stats">Stats Card</option>
-              <option value="product">E-commerce Product</option>
-              <option value="blog">Blog Post Summary</option>
-              <option value="profile">User Profile</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 top-5 flex items-center px-2 text-indigo-500">
-               <ChevronsUpDown className="h-4 w-4" />
-            </div>
-         </div>
+      <div className="px-6 py-4 flex-shrink-0 border-b border-indigo-100 bg-indigo-50/50">
+        <span className="text-[10px] font-bold text-indigo-700 uppercase mb-2 block tracking-widest">Select Template</span>
+        <div className="grid grid-cols-4 gap-2">
+          {([
+            { type: 'stats',   Icon: BarChart2,   label: 'Stats'   },
+            { type: 'product', Icon: ShoppingBag, label: 'Product' },
+            { type: 'blog',    Icon: FileText,    label: 'Blog'    },
+            { type: 'profile', Icon: User,        label: 'Profile' },
+          ] as const).map(({ type, Icon, label }) => {
+            const active = state.cardType === type;
+            return (
+              <button
+                key={type}
+                onClick={() => updateState('cardType', type, 'Card Type')}
+                className={`flex flex-col items-center gap-1.5 pt-4 pb-2 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+                  active
+                    ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm'
+                    : 'bg-white border-indigo-200 text-indigo-500 hover:border-indigo-400 hover:text-indigo-700'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 pt-4 space-y-6 pb-12 custom-scrollbar">

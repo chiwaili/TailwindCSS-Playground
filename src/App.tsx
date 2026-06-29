@@ -129,7 +129,7 @@ export default function App() {
       <div className="px-6 py-3 bg-white/70 backdrop-blur-xl border-b border-slate-300 flex-shrink-0 flex items-center justify-between z-10 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
         <div>
           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Tailwind Card Playground</h1>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-0.5">Learn by Changing Classes</p>
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-0.5">Learn by play</p>
         </div>
         
         <div className="flex items-center gap-4">

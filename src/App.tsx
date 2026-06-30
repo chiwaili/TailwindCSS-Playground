@@ -10,14 +10,16 @@ import { CardState, HoveredElement, DEFAULT_STATE, DEFAULT_STATE_STATS, DEFAULT_
 import { ControlsPanel } from './components/ControlsPanel';
 import { CardPreview } from './components/CardPreview';
 import { CodePanel } from './components/CodePanel';
-import { 
+import {
   headerBgOptions, headerHeightOptions,
   titleSizeOptions, titleWeightOptions, titleColorOptions, titleTrackingOptions, titleLeadingOptions,
   metaSizeOptions, metaLabelColorOptions, metaValueColorOptions, metaSpacingOptions,
   paddingOptions, marginOptions,
   bgOptions, borderOptions, radiusOptions, shadowOptions
 } from './data/options';
-import { GripVertical, GripHorizontal, Link as LinkIcon } from 'lucide-react';
+import { Link as LinkIcon, SlidersHorizontal, LayoutTemplate, Code2 } from 'lucide-react';
+
+type MobileTab = 'controls' | 'preview' | 'code';
 
 export default function App() {
   const [state, setState] = useState<CardState>(() => {
@@ -32,11 +34,18 @@ export default function App() {
     }
     return DEFAULT_STATE;
   });
-  
+
   const [hoveredElement, setHoveredElement] = useState<HoveredElement>(null);
   const [lastChange, setLastChange] = useState<{ label: string; value: string; prop: string } | null>(null);
-  
-  // Quick mapping from stateKey to property conceptual name
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  const [activeTab, setActiveTab] = useState<MobileTab>('preview');
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const propertyMap: Record<string, string> = {
     headerBg: 'Background / Gradient',
     headerHeight: 'Height',
@@ -118,6 +127,87 @@ export default function App() {
     toast.success('Shareable link copied to clipboard');
   };
 
+  const mobileTabs: { id: MobileTab; label: string; Icon: React.ElementType }[] = [
+    { id: 'controls', label: 'Controls', Icon: SlidersHorizontal },
+    { id: 'preview',  label: 'Preview',  Icon: LayoutTemplate },
+    { id: 'code',     label: 'Code',     Icon: Code2 },
+  ];
+
+  const sharedProps = {
+    state,
+    updateState,
+    hoveredElement,
+    setHoveredElement,
+    lastChange,
+    onReset: handleReset,
+    onRandomize: handleRandomize,
+  };
+
+  // ── Mobile layout ─────────────────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div className="h-dvh w-full bg-slate-100 flex flex-col overflow-hidden font-sans antialiased text-slate-900 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-indigo-200/40 rounded-full blur-[120px]"></div>
+          <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-rose-200/30 rounded-full blur-[120px]"></div>
+        </div>
+
+        {/* Header */}
+        <div className="px-4 py-2.5 bg-white/80 backdrop-blur-xl border-b border-slate-200 flex-shrink-0 flex items-center justify-between z-10">
+          <div>
+            <h1 className="text-base font-bold text-slate-900 tracking-tight">Tailwind Card Playground</h1>
+            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Learn by changing classes</p>
+          </div>
+          <button
+            onClick={shareLink}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-md text-xs font-medium transition-colors border border-indigo-200"
+          >
+            <LinkIcon className="w-3.5 h-3.5" />
+            Share
+          </button>
+        </div>
+
+        {/* Tab content */}
+        <div className="flex-1 overflow-hidden z-10 relative">
+          {activeTab === 'controls' && (
+            <div className="h-full bg-white/70 backdrop-blur-xl flex flex-col">
+              <ControlsPanel {...sharedProps} />
+            </div>
+          )}
+          {activeTab === 'preview' && (
+            <CardPreview state={state} hoveredElement={null} setHoveredElement={() => {}} />
+          )}
+          {activeTab === 'code' && (
+            <CodePanel state={state} lastChanged={lastChange?.value || null} />
+          )}
+        </div>
+
+        {/* Bottom tab bar */}
+        <div className="flex-shrink-0 bg-white/90 backdrop-blur-xl border-t border-slate-200 flex z-10 safe-area-inset-bottom">
+          {mobileTabs.map(({ id, label, Icon }) => {
+            const active = activeTab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex-1 flex flex-col items-center gap-1 py-2.5 text-[10px] font-semibold uppercase tracking-wider transition-colors ${
+                  active ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'
+                }`}
+              >
+                <Icon className={`w-5 h-5 ${active ? 'stroke-indigo-600' : ''}`} />
+                {label}
+                {active && <div className="absolute bottom-0 h-0.5 w-8 bg-indigo-500 rounded-full" />}
+              </button>
+            );
+          })}
+        </div>
+
+        <Toaster position="top-center" richColors />
+      </div>
+    );
+  }
+
+  // ── Desktop layout ────────────────────────────────────────────────────────
   return (
     <div className="h-screen w-full bg-slate-100 flex flex-col overflow-hidden font-sans antialiased text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 relative">
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -125,13 +215,13 @@ export default function App() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-rose-200/30 rounded-full blur-[120px]"></div>
         <div className="absolute top-[40%] left-[60%] w-[40%] h-[40%] bg-emerald-200/20 rounded-full blur-[100px]"></div>
       </div>
-      
+
       <div className="px-6 py-3 bg-white/70 backdrop-blur-xl border-b border-slate-300 flex-shrink-0 flex items-center justify-between z-10 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
         <div>
           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Tailwind Card Playground</h1>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-0.5">Learn by play</p>
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-0.5">Learn by Changing Classes</p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           {lastChange && (
             <div className="hidden md:flex animate-in fade-in slide-in-from-top-2 bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2 items-center gap-3 w-80">
@@ -143,7 +233,7 @@ export default function App() {
               </div>
             </div>
           )}
-          <button 
+          <button
             onClick={shareLink}
             className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-md text-sm font-medium transition-colors border border-indigo-200"
           >
@@ -156,14 +246,7 @@ export default function App() {
       <div className="flex-1 overflow-hidden z-10 relative">
         <PanelGroup orientation="horizontal" className="z-10 h-full">
           <Panel defaultSize={30} minSize={20} className="z-20 bg-white/70 backdrop-blur-xl border-r border-white flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
-            <ControlsPanel
-              state={state}
-              updateState={updateState}
-              setHoveredElement={setHoveredElement}
-              onReset={handleReset}
-              onRandomize={handleRandomize}
-              lastChange={lastChange}
-            />
+            <ControlsPanel {...sharedProps} />
           </Panel>
 
           <PanelResizeHandle className="w-1 bg-white/50 border-r border-white/50 cursor-col-resize hover:bg-indigo-400 transition-colors z-30 shadow-[1px_0_2px_rgba(0,0,0,0.02)] active:bg-indigo-500" />
@@ -171,7 +254,7 @@ export default function App() {
           <Panel defaultSize={70} minSize={30} className="flex flex-col relative bg-transparent h-full">
             <PanelGroup orientation="vertical" className="h-full">
               <Panel defaultSize={70} minSize={25} className="flex flex-col relative w-full h-full">
-                <CardPreview 
+                <CardPreview
                   state={state}
                   hoveredElement={hoveredElement}
                   setHoveredElement={setHoveredElement}

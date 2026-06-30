@@ -13,6 +13,7 @@ An interactive playground for learning Tailwind CSS utility classes. Select name
 - **Multiple card templates** — Stats, Product, Blog, and Profile
 - **Randomize** — generates a random combination of classes to explore
 - **Shareable links** — encodes the current state in the URL so you can share a specific configuration
+- **Mobile-friendly** — tabbed Controls / Preview / Code layout on small screens
 
 ## Stack
 
